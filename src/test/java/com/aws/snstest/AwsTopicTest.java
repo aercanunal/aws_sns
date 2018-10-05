@@ -100,7 +100,8 @@ public class AwsTopicTest {
 			CreatePlatformApplicationRequest request = new CreatePlatformApplicationRequest()
 					.withName("firebase-application")
 					.withPlatform("GCM")
-					.addAttributesEntry("PlatformCredential", "AIzaSyD4iqZpSlGQNZIp0USDo3PJUGdUb5z_mOY");
+					//you can use one of them from firebase project setting(cloud messaging tab)
+					.addAttributesEntry("PlatformCredential", "Legacy_Server_key Or Serve_Key");
 
 			CreatePlatformApplicationResult response = snsClient.createPlatformApplication(request);
 
@@ -140,7 +141,9 @@ public class AwsTopicTest {
 			AmazonSNS snsClient = getSnsClient();
 
 			//subscribe to an SNS topic
-			SubscribeRequest subRequest = new SubscribeRequest(topicArn, "email", "Ercan.unal@logo.com.tr");
+			//Protocal names
+			//https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html
+			SubscribeRequest subRequest = new SubscribeRequest(topicArn, "email", "badaa@badaa.com");
 			snsClient.subscribe(subRequest);
 
 			//get request id for SubscribeRequest from SNS metadata
@@ -183,9 +186,7 @@ public class AwsTopicTest {
 			//publish to an SNS topic
 			PublishRequest publishRequest = new PublishRequest();
 			publishRequest.setMessageAttributes(messageAttributes);
-//			String message = "{\"GCM\": \"{ \\\"notification\\\": { \\\"title\\\": \\\"asdf\\\",\\\"text\\\": \\\"asdf\\\" ,\\\"description\\\": \\\"Ercan\\\"} }\"}";
-			String message = "{\"GCM\": \"{ \\\"notification\\\": {  \\\"sender\\\": \\\"deneme\\\", \\\"sendDate\\\": \\\"04.10.2018\\\", \\\"text\\\": \\\"string\\\", \\\"title\\\": \\\"subject\\\"} }\"}";
-			System.out.println(message);
+			String message = "{\"GCM\": \"{ \\\"notification\\\": { \\\"title\\\": \\\"asdf\\\",\\\"text\\\": \\\"asdf\\\" ,\\\"description\\\": \\\"Ercan\\\"} }\"}";
 			publishRequest.setMessage(message);
 			publishRequest.setMessageStructure("json");
 			publishRequest.setTargetArn(targetEndpointArn);
@@ -208,6 +209,7 @@ public class AwsTopicTest {
 
 			// Insert your desired value (in seconds) of TTL here. For example, a TTL of 1 day would be 86,400 seconds.
 			Map<String, MessageAttributeValue> messageAttributes = new HashMap<String, MessageAttributeValue>();
+//			https://docs.aws.amazon.com/sns/latest/dg/sns-ttl.html
 			messageAttributes.put("AWS.SNS.MOBILE.GCM.TTL", new MessageAttributeValue().withDataType("String").withStringValue("86400"));
 
 			//publish to an SNS topic
@@ -236,6 +238,7 @@ public class AwsTopicTest {
 
 			// Insert your desired value (in seconds) of TTL here. For example, a TTL of 1 day would be 86,400 seconds.
 			Map<String, MessageAttributeValue> messageAttributes = new HashMap<String, MessageAttributeValue>();
+			// https://docs.aws.amazon.com/sns/latest/dg/sns-ttl.html
 			messageAttributes.put("AWS.SNS.MOBILE.GCM.TTL", new MessageAttributeValue().withDataType("String").withStringValue("86400"));
 
 			//publish to an SNS topic
